@@ -10,6 +10,7 @@ inv = {}
 def w():
 	time.sleep(0.5)
 
+
 class entity:
 	n = ""
 	damagerange = []
@@ -18,14 +19,19 @@ class entity:
 	dead =  False
 	closecomb = False
 	originchance = ()
+	healer = False
 
-	def __init__(self, entname, health, damagedeals, chanceofhit, close = False):
+	def __init__(self, entname, health, damagedeals, chanceofhit, close=False, hItem=False):
 		self.n = entname
 		self.damagerange = damagedeals
 		self.chance = chanceofhit
 		self.hp = health
 		self.closecomb = close
-		self.originchance = tuple(chanceofhit)
+		self.healer = hItem
+		try:
+			self.originchance = tuple(chanceofhit)
+		except:
+			self.originchance = chanceofhit
 
 	#When the monster is damaged
 	def Damaged(self, amount, printdam=True):
@@ -61,6 +67,7 @@ class entity:
 		else:
 			print(self.n, "missed!")
 
+
 def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 	i = 1
 	x = None
@@ -70,7 +77,7 @@ def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 			if desc == False:
 				print(str(i)+".", x)
 			elif desc == True:
-				print(str(i) + ".", x+", "+descs[i])
+				print(str(i) + ".", x+", "+descs[i-1])
 			i += 1
 		try:
 			x = input("Input the number of the option you want to choose: ")
@@ -85,6 +92,7 @@ def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 			i = 1
 			continue
 
+
 def multichoice(choicegiven, options):
 	optioninits = []
 	success = False
@@ -97,6 +105,7 @@ def multichoice(choicegiven, options):
 				return x
 		print("Please select a valid option!")
 
+
 def battle(monsters, playerent, inv):
 	w()
 	print("You have chosen to fight the monsters")
@@ -107,10 +116,18 @@ def battle(monsters, playerent, inv):
 	print("Please choose the weapon you would like to fight with:")
 	weapon = None
 	des = []
-
-	wchoice = multichoicenum(list(inv))
+	for x in list(inv):
+		i = inv[x]
+		if i.healer == True:
+			des.append("Heals: "+str(i.hp)+"HP (You have "+str(playerent.hp)+"HP left)")
+		else:
+			des.append("Damage: " + str(i.damagerange[0]) + " - " + str(i.damagerange[1]) + ", Chance of hitting target: " + str(i.chance[0]) + " in " + str(i.chance[1]) + ", is getting close required to hit: " + str(i.closecomb))
+	nas = []
+	for x in list(inv):
+		nas.append(inv[x].n)
+	wchoice = multichoicenum(nas, desc=True, descs=des)
 	weapon = inv[wchoice]
-	print(weapon.name)
+	print(weapon.n)
 
 player = entity(name, 100, [3, 8], [1, 3])
 
@@ -119,12 +136,8 @@ def start():
 	w()
 	print("Hello", name+"! What background would you like your character to have? ")
 	w()
-	print("The Local Guide background gives you an increased inventory capacity of 10 with a knife that deal a max 10 damage as a weapon.")
-	w()
-	print("The Soldier background gives you an inventory capacity of 5 items with a sword that deals a max 20 damage and is more likely to hit plus a bow which deals a max 15 damage and makes you less likely to be hit by a monster when used.")
-	w()
 	print("Please make your choice now: ")
-	bg = multichoicenum(["Local Guide", "Soldier"])
+	bg = multichoicenum(["Local Guide", "Soldier"], desc=True, descs=["Max inventory capacity: 10, Starting weapon: Knife which deals 5 to 10 damage, plus a 20HP healing potion", "Max inventory capacity: 5. Starting weapons: Sword which deals 10 to 20 damage plus a bow which deals 5 to 15 damage but saves you from having to get close to monsters"])
 	w()
 	print("You have chosen to be a", bg)
 	w()
@@ -140,11 +153,12 @@ def start():
 	if mc == "yes":
 		if bg == "Local Guide":
 			invmax = 10
-			inv["Knife"] = entity("knife", None, [5, 10], [1, 3], True)
+			inv["Knife"] = entity("Knife", None, [5, 10], [1, 3], True)
+			inv["HealingPotion"] = entity("20HP Healing Potion", 20, None, None, hItem=True)
 		elif bg == "Soldier":
 			invmax = 5
-			inv["Sword"] = entity("sword", None, [10, 20], [1, 2], True)
-			inv["Bow"] = entity("bow", None, [5, 15], [1, 3])
+			inv["Sword"] = entity("Sword", None, [10, 20], [1, 2], True)
+			inv["Bow"] = entity("Bow", None, [5, 15], [1, 3])
 
 		print("Good! Lets start!")
 		w()
