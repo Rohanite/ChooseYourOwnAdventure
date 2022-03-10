@@ -61,13 +61,16 @@ class entity:
 		else:
 			print(self.n, "missed!")
 
-def multichoicenum(options, retselnum=False):
+def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 	i = 1
 	x = None
 	success = False
 	while success == False:
 		for x in options:
-			print(str(i)+".", x)
+			if desc == False:
+				print(str(i)+".", x)
+			elif desc == True:
+				print(str(i) + ".", x+", "+descs[i])
 			i += 1
 		try:
 			x = input("Input the number of the option you want to choose: ")
@@ -95,8 +98,21 @@ def multichoice(choicegiven, options):
 		print("Please select a valid option!")
 
 def battle(monsters, playerent, inv):
+	w()
+	print("You have chosen to fight the monsters")
+	selMon = False
 	if len(monsters) > 1:
-		print("Placeholder")
+		selMon = True
+	w()
+	print("Please choose the weapon you would like to fight with:")
+	weapon = None
+	des = []
+
+	wchoice = multichoicenum(list(inv))
+	weapon = inv[wchoice]
+	print(weapon.name)
+
+player = entity(name, 100, [3, 8], [1, 3])
 
 def start():	
 	name = input("Welcome adventurer! What is your name?\n")
@@ -165,7 +181,8 @@ def C1L():
 		fn = multichoicenum(fnops)
 	if fn == fnopslg[0]:
 		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
-		
+		Monster2 = entity("Monster 1", 40, [5, 10], [1, 3])
+		battle([Monster1, Monster2], player, inv)
 
 def C1R():
 	print("ri")
