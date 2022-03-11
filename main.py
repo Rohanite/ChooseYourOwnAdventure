@@ -8,7 +8,7 @@ inv = {}
 
 #This func exists for efficiency sakes, it requires a lot less typing to call this instead of calling time.sleep
 def w():
-	time.sleep(0.5)
+	time.sleep(1)
 
 
 class entity:
@@ -45,6 +45,7 @@ class entity:
 			self.dead = True
 
 	def hit(self, entitytohit, isPlayer=False, playerent=None, prox = 0):
+		w()
 		if self.dead == True or entitytohit.dead == True:
 			print("Cannot hit, character is dead")
 			return
@@ -56,37 +57,36 @@ class entity:
 				print("Cannot hit, player is dead")
 				return
 			print("You are attacking", entitytohit.n, "with your", self.n)
-	
 			if self.closecomb == True and entitytohit.chance[1] == entitytohit.originchance[1]:
+				w()
 				print("You must move closer to", entitytohit.n+", they will be more likely to hit you next time they try.")
 				entitytohit.chance[1] -= 1 
-
+		w()
 		isHit = random.randint(0, self.chance[1])
 		if isHit <= self.chance[0]-prox:
 			entitytohit.Damaged(random.randint(self.damagerange[0], self.damagerange[1]))
 		else:
 			print(self.n, "missed!")
 
+player = entity(name, 100, [3, 8], [1, 3])
 
 def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 	i = 1
-	x = None
-	success = False
-	while success == False:
+	x = ""
+	while True:
 		for x in options:
 			if desc == False:
 				print(str(i)+".", x)
 			elif desc == True:
-				print(str(i) + ".", x+", "+descs[i-1])
+				print(str(i) + ".", x+", "+str(descs[i-1]))
 			i += 1
 		try:
 			x = input("Input the number of the option you want to choose: ")
 			n = options[int(x)-1]
-			success = True
 			if retselnum == False:
 				return n
 			else:
-				return x-1
+				return int(x)-1
 		except:
 			print("Enter a valid input!")
 			i = 1
@@ -106,33 +106,58 @@ def multichoice(choicegiven, options):
 		print("Please select a valid option!")
 
 
-def battle(monsters, playerent, inv):
+def battle(monsters):
 	w()
 	print("You have chosen to fight the monsters")
 	selMon = False
-	if len(monsters) > 1:
-		selMon = True
-	w()
-	print("Please choose the weapon you would like to fight with:")
-	weapon = None
-	des = []
-	for x in list(inv):
-		i = inv[x]
-		if i.healer == True:
-			des.append("Heals: "+str(i.hp)+"HP (You have "+str(playerent.hp)+"HP left)")
+	while True:
+		if len(monsters) > 1:
+			selMon = True
+		w()
+		print("\nPlease choose the weapon/item you would like to use/fight with:")
+		weapon = None
+		des = []
+		for x in list(inv):
+			i = inv[x]
+			if i.healer == True:
+				des.append("Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
+			else:
+				des.append("Damage: " + str(i.damagerange[0]) + " - " + str(i.damagerange[1]) + ", Chance of hitting target: " + str(i.chance[0]) + " in " + str(i.chance[1]) + ", is getting close required to hit: " + str(i.closecomb))
+		nas = []
+		k = []
+				
+		for x in list(inv):
+			nas.append(inv[x].n)
+			k.append(x)
+		wchoice = multichoicenum(nas, True, desc=True, descs=des)
+		weapon = inv[k[wchoice]]
+		mfight = 0
+		w()
+		if weapon.healer == True:
+			player.hp += weapon.hp
+			inv.pop(k[wchoice])
+			print("Your HP is now at",player.hp)
 		else:
-			des.append("Damage: " + str(i.damagerange[0]) + " - " + str(i.damagerange[1]) + ", Chance of hitting target: " + str(i.chance[0]) + " in " + str(i.chance[1]) + ", is getting close required to hit: " + str(i.closecomb))
-	nas = []
-	for x in list(inv):
-		nas.append(inv[x].n)
-	wchoice = multichoicenum(nas, desc=True, descs=des)
-	weapon = inv[wchoice]
-	print(weapon.n)
+			print("\nWhich monster would you like to attack?")
+			if selMon == True:
+				
+				de = []
+				mn = []
+				k = []
+				for x in monsters:
+					de.append(str(x.hp)+"HP left")
+					mn.append(x.n)
+				mfight = multichoicenum(mn, True, desc=True, descs=de)
+			weapon.hit(monsters[mfight], True, player)
+		for x in monsters:
+			x.hit(player)
+				
+			
 
-player = entity(name, 100, [3, 8], [1, 3])
 
 def start():	
 	name = input("Welcome adventurer! What is your name?\n")
+	player.n = name
 	w()
 	print("Hello", name+"! What background would you like your character to have? ")
 	w()
@@ -195,8 +220,8 @@ def C1L():
 		fn = multichoicenum(fnops)
 	if fn == fnopslg[0]:
 		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
-		Monster2 = entity("Monster 1", 40, [5, 10], [1, 3])
-		battle([Monster1, Monster2], player, inv)
+		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
+		battle([Monster1, Monster2])
 
 def C1R():
 	print("ri")
