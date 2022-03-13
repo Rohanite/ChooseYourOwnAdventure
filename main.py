@@ -149,9 +149,16 @@ def battle(monsters):
 					mn.append(x.n)
 				mfight = multichoicenum(mn, True, desc=True, descs=de)
 			weapon.hit(monsters[mfight], True, player)
+
+		i = 0
 		for x in monsters:
+			#TEST THIS!!!!!!
+			if x.dead == True:
+				monsters.pop(i)
+				continue
 			x.hit(player)
-				
+			i += 1
+
 			
 
 
