@@ -105,14 +105,29 @@ def multichoice(choicegiven, options):
 				return x
 		print("Please select a valid option!")
 
+def dead():
+	w()
+	print("You have died!")
+	w()
+	print("Would you like to restart the game or quit?")
+	qr = multichoicenum(["Quit", "Restart"], True)
+	if qr == 0:
+		quit()
+	if qr == 1:
+		start()
 
 def battle(monsters):
 	w()
 	print("You have chosen to fight the monsters")
 	selMon = False
 	while True:
+		if player.dead == True:
+			dead()
+
 		if len(monsters) > 1:
 			selMon = True
+		else:
+			selMon = False
 		w()
 		print("\nPlease choose the weapon/item you would like to use/fight with:")
 		weapon = None
@@ -138,9 +153,9 @@ def battle(monsters):
 			inv.pop(k[wchoice])
 			print("Your HP is now at",player.hp)
 		else:
-			print("\nWhich monster would you like to attack?")
+
 			if selMon == True:
-				
+				print("\nWhich monster would you like to attack?")
 				de = []
 				mn = []
 				k = []
@@ -152,17 +167,18 @@ def battle(monsters):
 
 		i = 0
 		for x in monsters:
-			#TEST THIS!!!!!!
 			if x.dead == True:
 				monsters.pop(i)
 				continue
 			x.hit(player)
 			i += 1
 
+
 			
 
 
-def start():	
+def start():
+	inv.clear()
 	name = input("Welcome adventurer! What is your name?\n")
 	player.n = name
 	w()
