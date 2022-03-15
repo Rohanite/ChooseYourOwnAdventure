@@ -172,7 +172,10 @@ def battle(monsters):
 				continue
 			x.hit(player)
 			i += 1
-
+		if bool(monsters) == False:
+			w()
+			print("You have won this battle! Congratulations!")
+			break
 
 			
 
