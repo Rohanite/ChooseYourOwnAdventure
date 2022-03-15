@@ -176,8 +176,19 @@ def battle(monsters):
 			w()
 			print("You have won this battle! Congratulations!")
 			break
+	return
 
-			
+def invItems(items):
+	multiIt = False
+	if len(items) > 1:
+		muliIt = True
+	for x in items:
+		w()
+		print("You have found a", x.n)
+	w()
+	#FURTHER TESTING NEEDED HERE
+	print("Your inventory has the capacity for", len(inv)-invmax, "more items")
+		
 
 
 def start():
@@ -248,6 +259,10 @@ def C1L():
 		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
 		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
 		battle([Monster1, Monster2])
+		print("You search the area to see if the monsters had any valuable possessions")
+		StrSword = entity("Strong Sword", None, [15, 30], [1, 2], True)
+		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
+		invItems([StrSword, HPotion])
 
 def C1R():
 	print("ri")
