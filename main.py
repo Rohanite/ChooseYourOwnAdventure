@@ -5,6 +5,7 @@ name = ""
 bg = ""
 invmax = 0
 inv = {}
+Debug = False
 
 #This func exists for efficiency sakes, it requires a lot less typing to call this instead of calling time.sleep
 def w():
@@ -218,9 +219,11 @@ def invItems(items):
 				nas.append("Actually never mind, I won't pick this item up")
 				des.append("")
 				choice = multichoicenum(nas, desc=True, descs=des)
-				if choice == len(nas):
+				if choice == nas[len(nas)-1]:
 					print("You have decided not to pick this item up.")
 					continue
+				else:
+					inv.pop(k[choice])
 				
 					
 				
@@ -256,7 +259,10 @@ def start():
 			inv["HealingPotion"] = entity("20HP Healing Potion", 20, None, None, hItem=True)
 
 		elif bg == "Soldier":
-			invmax = 5
+			if Debug == False:
+				invmax = 5
+			else:
+				invmax = 2
 			inv["Sword"] = entity("Sword", None, [10, 20], [1, 2], True)
 			inv["Bow"] = entity("Bow", None, [5, 15], [1, 3])
 
@@ -296,7 +302,8 @@ def C1L():
 	if fn == fnopslg[0]:
 		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
 		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
-		battle([Monster1, Monster2])
+		if Debug == False:
+			battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
 		StrSword = entity("Strong Sword", None, [15, 30], [1, 2], True)
 		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
