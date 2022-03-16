@@ -3,7 +3,7 @@ import random
 
 name = ""
 bg = ""
-invmax = 0
+global invmax
 inv = {}
 
 #This func exists for efficiency sakes, it requires a lot less typing to call this instead of calling time.sleep
@@ -187,7 +187,7 @@ def invItems(items):
 		print("You have found a", x.n)
 	w()
 	#FURTHER TESTING NEEDED HERE
-	print("Your inventory has the capacity for", len(inv)-invmax, "more items")
+	print("Your inventory has the capacity for", invmax-len(inv), "more items")
 		
 
 
@@ -214,9 +214,11 @@ def start():
 		start()
 	if mc == "yes":
 		if bg == "Local Guide":
+			
 			invmax = 10
 			inv["Knife"] = entity("Knife", None, [5, 10], [1, 3], True)
 			inv["HealingPotion"] = entity("20HP Healing Potion", 20, None, None, hItem=True)
+
 		elif bg == "Soldier":
 			invmax = 5
 			inv["Sword"] = entity("Sword", None, [10, 20], [1, 2], True)
