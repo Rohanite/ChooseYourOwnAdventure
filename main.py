@@ -3,7 +3,7 @@ import random
 
 name = ""
 bg = ""
-global invmax
+invmax = 0
 inv = {}
 
 #This func exists for efficiency sakes, it requires a lot less typing to call this instead of calling time.sleep
@@ -186,12 +186,15 @@ def invItems(items):
 		w()
 		print("You have found a", x.n)
 	w()
-	#FURTHER TESTING NEEDED HERE
+	
 	print("Your inventory has the capacity for", invmax-len(inv), "more items")
-		
+	for x in items:
+		w()
+		pu = multichoice()
 
 
 def start():
+	global invmax
 	inv.clear()
 	name = input("Welcome adventurer! What is your name?\n")
 	player.n = name
@@ -260,7 +263,7 @@ def C1L():
 	if fn == fnopslg[0]:
 		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
 		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
-		battle([Monster1, Monster2])
+		#battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
 		StrSword = entity("Strong Sword", None, [15, 30], [1, 2], True)
 		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
