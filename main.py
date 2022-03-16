@@ -190,7 +190,40 @@ def invItems(items):
 	print("Your inventory has the capacity for", invmax-len(inv), "more items")
 	for x in items:
 		w()
-		pu = multichoice()
+		if x.healer == True:
+			pu = multichoice("Would you like to pick up "+x.n+": Heals: "+str(x.hp)+"HP (You have "+str(player.hp)+"HP left)", ["yes", "no"])
+		else:
+			pu = multichoice("Would you like to pick up "+x.n+": Damage: " + str(x.damagerange[0]) + " - " + str(x.damagerange[1]) + ", Chance of hitting target: " + str(x.chance[0]) + " in " + str(x.chance[1]) + ", is getting close required to hit: " + str(x.closecomb), ["yes", "no"])
+		if pu == "yes":
+			if len(inv) < invmax:
+				inv[x.n.replace(" ", "")] = x
+				print(x.n+" has been added to your inventory")
+			else:
+				print("Your inventory is full!")
+				w()
+				print("To put this item in your inventory you're going to need to drop an item!")
+				des = []
+				for x in list(inv):
+					i = inv[x]
+					if i.healer == True:
+						des.append("Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
+					else:
+						des.append("Damage: " + str(i.damagerange[0]) + " - " + str(i.damagerange[1]) + ", Chance of hitting target: " + str(i.chance[0]) + " in " + str(i.chance[1]) + ", is getting close required to hit: " + str(i.closecomb))
+				nas = []
+				k = []
+						
+				for x in list(inv):
+					nas.append(inv[x].n)
+					k.append(x)
+				nas.append("Actually never mind, I won't pick this item up")
+				des.append("")
+				choice = multichoicenum(nas, desc=True, descs=des)
+				if choice == len(nas):
+					print("You have decided not to pick this item up.")
+					continue
+				
+					
+				
 
 
 def start():
@@ -223,7 +256,7 @@ def start():
 			inv["HealingPotion"] = entity("20HP Healing Potion", 20, None, None, hItem=True)
 
 		elif bg == "Soldier":
-			invmax = 5
+			invmax = 2
 			inv["Sword"] = entity("Sword", None, [10, 20], [1, 2], True)
 			inv["Bow"] = entity("Bow", None, [5, 15], [1, 3])
 
