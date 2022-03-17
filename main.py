@@ -5,7 +5,7 @@ name = ""
 bg = ""
 invmax = 0
 inv = {}
-Debug = False
+Debug = True
 
 #This func exists for efficiency sakes, it requires a lot less typing to call this instead of calling time.sleep
 def w():
@@ -74,6 +74,7 @@ player = entity(name, 100, [3, 8], [1, 3])
 def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 	i = 1
 	x = ""
+	leave = False
 	while True:
 		for x in options:
 			if desc == False:
@@ -83,6 +84,11 @@ def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 			i += 1
 		try:
 			x = input("Input the number of the option you want to choose: ")
+			if x.lower() == "restart":
+				start()
+			if x.lower() == "quit":
+				leave = True
+				break
 			n = options[int(x)-1]
 			if retselnum == False:
 				return n
@@ -92,6 +98,8 @@ def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 			print("Enter a valid input!")
 			i = 1
 			continue
+	if leave == True:
+		exit(1)
 
 
 def multichoice(choicegiven, options):
@@ -101,6 +109,10 @@ def multichoice(choicegiven, options):
 		optioninits.append(options[x][0])
 	while success == False:
 		c = input(choicegiven + ' ' + '/'.join(optioninits) + ": ")
+		if c.lower() == "restart":
+			start()
+		if c.lower() == "quit":
+			exit(1)
 		for x in options:
 			if c.lower() == x or c.lower() == x[0]:
 				return x
@@ -113,7 +125,7 @@ def dead():
 	print("Would you like to restart the game or quit?")
 	qr = multichoicenum(["Quit", "Restart"], True)
 	if qr == 0:
-		quit()
+		exit(1)
 	if qr == 1:
 		start()
 
@@ -180,9 +192,7 @@ def battle(monsters):
 	return
 
 def invItems(items):
-	multiIt = False
-	if len(items) > 1:
-		muliIt = True
+
 	for x in items:
 		w()
 		print("You have found a", x.n)
@@ -204,8 +214,8 @@ def invItems(items):
 				w()
 				print("To put this item in your inventory you're going to need to drop an item!")
 				des = []
-				for x in list(inv):
-					i = inv[x]
+				for c in list(inv):
+					i = inv[c]
 					if i.healer == True:
 						des.append("Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
 					else:
@@ -213,17 +223,21 @@ def invItems(items):
 				nas = []
 				k = []
 						
-				for x in list(inv):
-					nas.append(inv[x].n)
-					k.append(x)
+				for g in list(inv):
+					nas.append(inv[g].n)
+					k.append(g)
 				nas.append("Actually never mind, I won't pick this item up")
 				des.append("")
-				choice = multichoicenum(nas, desc=True, descs=des)
-				if choice == nas[len(nas)-1]:
+				choice = multichoicenum(nas, True, desc=True, descs=des)
+				if nas[choice] == nas[len(nas)-1]:
 					print("You have decided not to pick this item up.")
 					continue
 				else:
 					inv.pop(k[choice])
+					inv[x.n.replace(" ", "")] = x
+					print(x.n+" has been added to your inventory")
+		else:
+			print("You have decided not to pick this item up.")
 				
 					
 				
@@ -270,6 +284,7 @@ def start():
 		w()
 		for x in range(0, 100):
 			print("\n")
+		print("(Do note that you can type quit or restart at any input prompt to do that)")
 		print("You wake up in camp!")
 		w()
 		print("Yesterday was a big day, today your hoping to reach your final destination!")
@@ -302,12 +317,15 @@ def C1L():
 	if fn == fnopslg[0]:
 		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
 		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
-		if Debug == False:
-			battle([Monster1, Monster2])
+		battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
 		StrSword = entity("Strong Sword", None, [15, 30], [1, 2], True)
 		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
 		invItems([StrSword, HPotion])
+	if fn == fnopslg[1]:
+		print("You have chosen to try and pass through the clearing")
+		w()
+		
 
 def C1R():
 	print("ri")
