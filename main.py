@@ -5,7 +5,7 @@ name = ""
 bg = ""
 invmax = 0
 inv = {}
-Debug = True
+Debug = False
 
 #This func exists for efficiency sakes, it requires a lot less typing to call this instead of calling time.sleep
 def w():
