@@ -9,7 +9,7 @@ Debug = False
 
 #This func exists for efficiency sakes, it requires a lot less typing to call this instead of calling time.sleep
 def w():
-	time.sleep(1)
+	time.sleep(0.5)
 
 
 class entity:
@@ -130,8 +130,7 @@ def dead():
 		start()
 
 def battle(monsters):
-	w()
-	print("You have chosen to fight the monsters")
+
 	selMon = False
 	while True:
 		if player.dead == True:
@@ -245,6 +244,7 @@ def invItems(items):
 
 def start():
 	global invmax
+	global bg
 	inv.clear()
 	name = input("Welcome adventurer! What is your name?\n")
 	player.n = name
@@ -269,7 +269,7 @@ def start():
 		if bg == "Local Guide":
 			
 			invmax = 10
-			inv["Knife"] = entity("Knife", None, [5, 10], [1, 3], True)
+			inv["Knife"] = entity("Knife", None, [5, 10], [1, 2], True)
 			inv["HealingPotion"] = entity("20HP Healing Potion", 20, None, None, hItem=True)
 
 		elif bg == "Soldier":
@@ -310,13 +310,15 @@ def C1L():
 	w()
 	fnopslg = ["Fight the monsters", "Try to pass through the clearing", "Use Local knowledge to pass around the clearing"]
 	fnops = ["Fight the monsters", "Try to pass through the clearing"]
-	if bg == "Local Guide":
+	if bg == 'Local Guide':
 		fn = multichoicenum(fnopslg)
 	else:
 		fn = multichoicenum(fnops)
 	if fn == fnopslg[0]:
 		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
 		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
+		w()
+		print("You have chosen to fight the monsters")
 		battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
 		StrSword = entity("Strong Sword", None, [15, 30], [1, 2], True)
@@ -325,6 +327,29 @@ def C1L():
 	if fn == fnopslg[1]:
 		print("You have chosen to try and pass through the clearing")
 		w()
+		print("As you try to sneak through the clearing a monster suddenly turns around")
+		w()
+		print("He sees you and starts heading towards you looking angry")
+		w()
+		print("The other monster has noticed and now both are going after you!")
+		w()
+		print("Your only choice now is to fight!")
+		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
+		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
+		w()
+		battle([Monster1, Monster2])
+		print("You search the area to see if the monsters had any valuable possessions")
+		StrSword = entity("Strong Sword", None, [15, 30], [1, 2], True)
+		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
+		invItems([StrSword, HPotion])
+	if fn == fnopslg[2]:
+		w()
+		print("You decide to try and find a way around the clearing.")
+		w()
+		print("You know of a very rough track around here that should allow you to pass problem free.")
+		w()
+		print("The path successfully gets you out of the way of the monsters!")
+
 		
 
 def C1R():
