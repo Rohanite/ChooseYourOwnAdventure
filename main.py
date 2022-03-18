@@ -432,6 +432,14 @@ def C1R():
 	w()
 	if bg == 'Soldier':
 		print("You notice a trap up ahead!")
+		w()
+		print("You can try and defuse the trap if you want or you could try and run away")
+		w()
+		choi = multichoicenum(["Run away", "Defuse"], True)
+		if choi == 0:
+			print('You decide to try and run away')
+			w()
+			print("As you try to run some monsters see you")
 
 
 def RMP():
