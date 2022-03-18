@@ -9,7 +9,7 @@ Debug = False
 
 #This func exists for efficiency sakes, it requires a lot less typing to call this instead of calling time.sleep
 def w():
-	time.sleep(0.5)
+	time.sleep(1)
 
 
 class entity:
@@ -72,10 +72,11 @@ class entity:
 player = entity(name, 100, [3, 8], [1, 3])
 
 def multichoicenum(options, retselnum=False, desc=False, descs=[]):
-	i = 1
-	x = ""
+
 	leave = False
 	while True:
+		i = 1
+		x = ""
 		for x in options:
 			if desc == False:
 				print(str(i)+".", x)
@@ -89,6 +90,29 @@ def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 			if x.lower() == "quit":
 				leave = True
 				break
+			if x.lower() == "inv" or x.lower() == "inventory":
+				print("You have decided to check your inventory")
+				print("Your currently usable items are: ")
+				n = 1
+				for x in list(inv):
+					i = inv[x]
+					if i.healer == True:
+						print(str(n)+". "+i.n+ ", Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
+						n += 1
+				print(str(n)+". Actually I'd rather not use any of these items")
+				j = input("Enter the number of the item you would like to use: \n")
+				try:
+					if int(j) == n:
+						print("You have chosen not to use any of these items")
+						continue
+					it = inv[list(inv)[int(j)]]
+					player.hp += it.hp
+					inv.pop(list(inv)[int(j)])
+					print("Your HP is now at",player.hp)
+					continue
+				except:
+					print("Please select a valid option!")
+					continue
 			n = options[int(x)-1]
 			if retselnum == False:
 				return n
@@ -113,6 +137,30 @@ def multichoice(choicegiven, options):
 			start()
 		if c.lower() == "quit":
 			exit(1)
+		if c.lower() == "inv" or c.lower() == "inventory":
+			print("You have decided to check your inventory")
+			print("Your currently usable items are: ")
+			n = 1
+			for x in list(inv):
+				i = inv[x]
+				if i.healer == True:
+					print(str(n)+". "+i.n+ ", Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
+					n += 1
+			print(str(n)+". Actually I'd rather not use any of these items")
+			j = input("Enter the number of the item you would like to use: \n")
+			try:
+				if int(j) == n:
+					print("You have chosen not to use any of these items")
+					continue
+				it = inv[list(inv)[int(j)]]
+				player.hp += it.hp
+				inv.pop(list(inv)[int(j)])
+				print("Your HP is now at",player.hp)
+				continue
+			except:
+				print("Please select a valid option!")
+				continue
+					
 		for x in options:
 			if c.lower() == x or c.lower() == x[0]:
 				return x
@@ -252,7 +300,7 @@ def start():
 	print("Hello", name+"! What background would you like your character to have? ")
 	w()
 	print("Please make your choice now: ")
-	bg = multichoicenum(["Local Guide", "Soldier"], desc=True, descs=["Max inventory capacity: 10, Starting weapon: Knife which deals 5 to 10 damage, plus a 20HP healing potion", "Max inventory capacity: 5. Starting weapons: Sword which deals 10 to 20 damage plus a bow which deals 5 to 15 damage but saves you from having to get close to monsters"])
+	bg = multichoicenum(["Local Guide", "Soldier"], desc=True, descs=["Max inventory capacity: 10, Starting weapon: Knife which deals 10 to 15 damage, plus a 20HP healing potion", "Max inventory capacity: 5. Starting weapons: Sword which deals 15 to 25 damage plus a bow which deals 10 to 15 damage but saves you from having to get close to monsters"])
 	w()
 	print("You have chosen to be a", bg)
 	w()
@@ -269,7 +317,7 @@ def start():
 		if bg == "Local Guide":
 			
 			invmax = 10
-			inv["Knife"] = entity("Knife", None, [5, 10], [1, 2], True)
+			inv["Knife"] = entity("Knife", None, [10, 15], [1, 2], True)
 			inv["HealingPotion"] = entity("20HP Healing Potion", 20, None, None, hItem=True)
 
 		elif bg == "Soldier":
@@ -277,14 +325,14 @@ def start():
 				invmax = 5
 			else:
 				invmax = 2
-			inv["Sword"] = entity("Sword", None, [10, 20], [1, 2], True)
-			inv["Bow"] = entity("Bow", None, [5, 15], [1, 3])
+			inv["Sword"] = entity("Sword", None, [15, 25], [1, 2], True)
+			inv["Bow"] = entity("Bow", None, [10, 15], [1, 3])
 
 		print("Good! Lets start!")
 		w()
 		for x in range(0, 100):
 			print("\n")
-		print("(Do note that you can type quit or restart at any input prompt to do that)")
+		print("(Do note that you can type quit or restart at any input prompt to do that and you can type inv at any input prompt to open your inventory and use healing items)")
 		print("You wake up in camp!")
 		w()
 		print("Yesterday was a big day, today your hoping to reach your final destination!")
@@ -315,13 +363,13 @@ def C1L():
 	else:
 		fn = multichoicenum(fnops)
 	if fn == fnopslg[0]:
-		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
-		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
+		Monster1 = entity("Monster 1", 50, [5, 10], [1, 3])
+		Monster2 = entity("Monster 2", 50, [5, 10], [1, 3])
 		w()
 		print("You have chosen to fight the monsters")
 		battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
-		StrSword = entity("Strong Sword", None, [15, 30], [1, 2], True)
+		StrSword = entity("Strong Sword", None, [20, 35], [1, 2], True)
 		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
 		invItems([StrSword, HPotion])
 	if fn == fnopslg[1]:
@@ -334,12 +382,12 @@ def C1L():
 		print("The other monster has noticed and now both are going after you!")
 		w()
 		print("Your only choice now is to fight!")
-		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
-		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
+		Monster1 = entity("Monster 1", 50, [5, 10], [1, 3])
+		Monster2 = entity("Monster 2", 50, [5, 10], [1, 3])
 		w()
 		battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
-		StrSword = entity("Strong Sword", None, [15, 30], [1, 2], True)
+		StrSword = entity("Strong Sword", None, [20, 35], [1, 2], True)
 		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
 		invItems([StrSword, HPotion])
 	if fn == fnopslg[2]:
@@ -349,10 +397,44 @@ def C1L():
 		print("You know of a very rough track around here that should allow you to pass problem free.")
 		w()
 		print("The path successfully gets you out of the way of the monsters!")
-
-		
+	w()
+	print("You continue on your path")
+	w()
+	print("You stumble upon a cabin")
+	w()
+	ch = multichoice("Would you like to enter the cabin?", ["yes", "no"])
+	if ch == "yes":
+		w()
+		print("You decide to enter the cabin")
+		w()
+		print("When you enter you are relieved to find no monsters")
+		w()
+		print("You decide to see if you can find anything")
+		WkBow = entity("Weak Bow", None, [5, 10], [1, 3])
+		Sword = entity("Sword", None, [15, 25], [1, 2], True)
+		HPot = entity("20HP Healing Potion", 20, None, None, hItem = True)
+		invItems([WkBow, Sword, HPot])
+		w()
+		print("After going through everything in the cabin you leave")
+		w()
+		print("You continue on you path")
+		RMP()
+	else:
+		w()
+		print("You have decided not to enter the cabin")
+		w()
+		print("You continue on your path")
+		RMP()
 
 def C1R():
-	print("ri")
+	w()
+	print("You decide to go right from camp")
+	w()
+	if bg == 'Soldier':
+		print("You notice a trap up ahead!")
+
+
+def RMP():
+	print("remeet")
 
 start()
