@@ -110,8 +110,8 @@ def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 					inv.pop(list(inv)[int(j)])
 					print("Your HP is now at",player.hp)
 					continue
-				except:
-					print("Please select a valid option!")
+				except Exception as er:
+					print(er,"Please select a valid option!")
 					continue
 			n = options[int(x)-1]
 			if retselnum == False:
@@ -300,7 +300,7 @@ def start():
 	print("Hello", name+"! What background would you like your character to have? ")
 	w()
 	print("Please make your choice now: ")
-	bg = multichoicenum(["Local Guide", "Soldier"], desc=True, descs=["Max inventory capacity: 10, Starting weapon: Knife which deals 10 to 15 damage, plus a 20HP healing potion", "Max inventory capacity: 5. Starting weapons: Sword which deals 15 to 25 damage plus a bow which deals 10 to 15 damage but saves you from having to get close to monsters"])
+	bg = multichoicenum(["Local Guide", "Soldier"], desc=True, descs=["Max inventory capacity: 10, Starting weapon: Knife which deals 10 to 20 damage, plus a 50HP healing potion", "Max inventory capacity: 5. Starting weapons: Sword which deals 15 to 25 damage plus a bow which deals 10 to 15 damage but saves you from having to get close to monsters"])
 	w()
 	print("You have chosen to be a", bg)
 	w()
@@ -317,8 +317,8 @@ def start():
 		if bg == "Local Guide":
 			
 			invmax = 10
-			inv["Knife"] = entity("Knife", None, [10, 15], [1, 2], True)
-			inv["HealingPotion"] = entity("20HP Healing Potion", 20, None, None, hItem=True)
+			inv["Knife"] = entity("Knife", None, [10, 20], [1, 2], True)
+			inv["HealingPotion"] = entity("50HP Healing Potion", 50, None, None, hItem=True)
 
 		elif bg == "Soldier":
 			if Debug == False:
@@ -363,8 +363,8 @@ def C1L():
 	else:
 		fn = multichoicenum(fnops)
 	if fn == fnopslg[0]:
-		Monster1 = entity("Monster 1", 50, [5, 10], [1, 3])
-		Monster2 = entity("Monster 2", 50, [5, 10], [1, 3])
+		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
+		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
 		w()
 		print("You have chosen to fight the monsters")
 		battle([Monster1, Monster2])
@@ -382,8 +382,8 @@ def C1L():
 		print("The other monster has noticed and now both are going after you!")
 		w()
 		print("Your only choice now is to fight!")
-		Monster1 = entity("Monster 1", 50, [5, 10], [1, 3])
-		Monster2 = entity("Monster 2", 50, [5, 10], [1, 3])
+		Monster1 = entity("Monster 1", 40, [5, 10], [1, 3])
+		Monster2 = entity("Monster 2", 40, [5, 10], [1, 3])
 		w()
 		battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
@@ -412,7 +412,7 @@ def C1L():
 		print("You decide to see if you can find anything")
 		WkBow = entity("Weak Bow", None, [5, 10], [1, 3])
 		Sword = entity("Sword", None, [15, 25], [1, 2], True)
-		HPot = entity("20HP Healing Potion", 20, None, None, hItem = True)
+		HPot = entity("60HP Healing Potion", 60, None, None, hItem = True)
 		invItems([WkBow, Sword, HPot])
 		w()
 		print("After going through everything in the cabin you leave")
@@ -430,12 +430,12 @@ def C1R():
 	def B1():
 		M1 = entity("Monster 1", 40, [5, 10], [1, 2])
 		M2 = entity("Monster 2", 20, [8, 16], [1, 3])
-		M3 = entity("Monster 3", 40, [7, 13], [1, 3])
+		M3 = entity("Monster 3", 30, [7, 13], [1, 3])
 		battle([M1, M2, M3])
 		w()
 		print("You look around for items.")
 		w()
-		HPotion = entity("30HP Healing Potion", 40, None, None, hItem=True)
+		HPotion = entity("60HP Healing Potion", 60, None, None, hItem=True)
 		Sword = entity("Regular Sword", None, [15, 25], [1, 2], close=True)
 		invItems([HPotion, Sword])
 		print("You continue on")
@@ -497,44 +497,44 @@ def C1R():
 			w()
 			B1()
 		w()
-		print("After a while of walking you eventually reach a clearing with a monster in it")
+	print("After a while of walking you eventually reach a clearing with a monster in it")
+	w()
+	print("You can either fight the monster in the hopes of finding loot or try and go around the clearing")
+	c1 = multichoicenum(["Fight", "Try to go around clearing"], True)
+	w()
+	if c1 == 0:
+		print("You have decided to fight the monster")
 		w()
-		print("You can either fight the monster in the hopes of finding loot or try and go around the clearing")
-		c1 = multichoicenum(["Fight", "Try to go around clearing"], True)
+		M4 = entity("Monster", 40, [10, 20], [1, 2])
+		battle([M4])
 		w()
-		if c1 == 0:
-			print("You have decided to fight the monster")
-			w()
-			M4 = entity("Monster", 50, [10, 20], [1, 2])
-			battle([M4])
-			w()
-			print("You have a look around for any items")
-			HPotionfifty = entity("50HP Healing Potion", 50, None, None)
-			StrSword = entity("Strong Sword", None, [20, 35], [1, 2], True)
-			StrBow = entity("Strong Bow", None, [15, 25], [1, 3])
-			invItems([HPotionfifty, StrSword, StrBow])
-			w()
-			print("You continue on")
-		else:
-			print("You have chosen to go past the clearing")
-			w()
-			print("Being very careful, you tiptoe your way around the monster and the clearing")
-			w()
-			print("You are successful in getting past the clearing")
-			w()
-			print("You continue on your journey")
-		RMP()
+		print("You have a look around for any items")
+		HPotionfifty = entity("75HP Healing Potion", 75, None, None, hItem=True)
+		StrSword = entity("Strong Sword", None, [20, 35], [1, 2], True)
+		StrBow = entity("Strong Bow", None, [15, 25], [1, 3])
+		invItems([HPotionfifty, StrSword, StrBow])
+		w()
+		print("You continue on")
+	else:
+		print("You have chosen to go past the clearing")
+		w()
+		print("Being very careful, you tiptoe your way around the monster and the clearing")
+		w()
+		print("You are successful in getting past the clearing")
+		w()
+		print("You continue on your journey")
+	RMP()
 
 
 def RMP():
 	def B1R(WithHans=True):
 
-		Jon = entity("Jon", 40, [15, 25], [1, 2])
-		Jerry = entity("Jerry", 20, [10, 15], [1, 4])
-		Randy = entity("Randy", 30, [10, 20], [1, 3])
-		Roy = entity("Roy", 45, [15, 20], [2, 5])
+		Jon = entity("Jon", 30, [50, 18], [1, 3])
+		Jerry = entity("Jerry", 20, [15, 25], [1, 4])
+		Randy = entity("Randy", 30, [5, 15], [1, 3])
+		Roy = entity("Roy", 35, [5, 10], [2, 5])
 		if WithHans == True:
-			Hans = entity("Hans", 50, [5, 10], [2, 3])
+			Hans = entity("Hans", 40, [5, 10], [3, 5])
 			battle([Hans, Jon, Jerry, Randy, Roy])
 		else:
 				battle([Jon, Jerry, Randy, Roy])
