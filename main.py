@@ -91,28 +91,14 @@ def multichoicenum(options, retselnum=False, desc=False, descs=[]):
 				leave = True
 				break
 			if x.lower() == "inv" or x.lower() == "inventory":
-				print("You have decided to check your inventory")
-				print("Your currently usable items are: ")
-				n = 1
-				for x in list(inv):
-					i = inv[x]
+				for c in list(inv):
+					i = inv[c]
 					if i.healer == True:
-						print(str(n)+". "+i.n+ ", Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
-						n += 1
-				print(str(n)+". Actually I'd rather not use any of these items")
-				j = input("Enter the number of the item you would like to use: \n")
-				try:
-					if int(j) == n:
-						print("You have chosen not to use any of these items")
-						continue
-					it = inv[list(inv)[int(j)]]
-					player.hp += it.hp
-					inv.pop(list(inv)[int(j)])
-					print("Your HP is now at",player.hp)
-					continue
-				except Exception as er:
-					print(er,"Please select a valid option!")
-					continue
+						print(i.n+", Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
+					else:
+						print(i.n+", Damage: " + str(i.damagerange[0]) + " - " + str(i.damagerange[1]) + ", Chance of hitting target: " + str(i.chance[0]) + " in " + str(i.chance[1]) + ", is getting close required to hit: " + str(i.closecomb))
+				continue
+				
 			n = options[int(x)-1]
 			if retselnum == False:
 				return n
@@ -139,27 +125,15 @@ def multichoice(choicegiven, options):
 			exit(1)
 		if c.lower() == "inv" or c.lower() == "inventory":
 			print("You have decided to check your inventory")
-			print("Your currently usable items are: ")
-			n = 1
+			print("Your current items are: ")
 			for x in list(inv):
 				i = inv[x]
 				if i.healer == True:
-					print(str(n)+". "+i.n+ ", Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
-					n += 1
-			print(str(n)+". Actually I'd rather not use any of these items")
-			j = input("Enter the number of the item you would like to use: \n")
-			try:
-				if int(j) == n:
-					print("You have chosen not to use any of these items")
-					continue
-				it = inv[list(inv)[int(j)]]
-				player.hp += it.hp
-				inv.pop(list(inv)[int(j)])
-				print("Your HP is now at",player.hp)
-				continue
-			except:
-				print("Please select a valid option!")
-				continue
+					print(i.n+", Heals: "+str(i.hp)+"HP (You have "+str(player.hp)+"HP left)")
+				else:
+					print(i.n+", Damage: " + str(i.damagerange[0]) + " - " + str(i.damagerange[1]) + ", Chance of hitting target: " + str(i.chance[0]) + " in " + str(i.chance[1]) + ", is getting close required to hit: " + str(i.closecomb))
+			continue
+				
 					
 		for x in options:
 			if c.lower() == x or c.lower() == x[0]:
