@@ -58,7 +58,7 @@ class entity:
 				print("Cannot hit, player is dead")
 				return
 			print("You are attacking", entitytohit.n, "with your", self.n)
-			if self.closecomb == True and entitytohit.chance[1] == entitytohit.originchance[1]:
+			if self.closecomb == True and entitytohit.chance[1] == entitytohit.originchance[1] and entitytohit.chance[1] != 2:
 				w()
 				print("You must move closer to", entitytohit.n+", they will be more likely to hit you next time they try.")
 				entitytohit.chance[1] -= 1 
@@ -181,8 +181,9 @@ def battle(monsters):
 		wchoice = multichoicenum(nas, True, desc=True, descs=des)
 		weapon = inv[k[wchoice]]
 		mfight = 0
-		w()
+
 		if weapon.healer == True:
+			w()
 			player.hp += weapon.hp
 			inv.pop(k[wchoice])
 			print("Your HP is now at",player.hp)
@@ -197,6 +198,7 @@ def battle(monsters):
 					de.append(str(x.hp)+"HP left, Damage: "+str(x.damagerange[0])+" - "+ str(x.damagerange[1])+", Chance of hitting: "+str(x.chance[0])+" in "+str(x.chance[1]))
 					mn.append(x.n)
 				mfight = multichoicenum(mn, True, desc=True, descs=de)
+
 			weapon.hit(monsters[mfight], True, player)
 
 		i = 0
@@ -268,6 +270,7 @@ def start():
 	global invmax
 	global bg
 	inv.clear()
+	player.hp = 100
 	name = input("Welcome adventurer! What is your name?\n")
 	player.n = name
 	w()
@@ -306,7 +309,7 @@ def start():
 		w()
 		for x in range(0, 100):
 			print("\n")
-		print("(Do note that you can type quit or restart at any input prompt to do that and you can type inv at any input prompt to open your inventory and use healing items)")
+		print("(Do note that you can type quit or restart at any input prompt to do that and you can type inv at any input prompt to display your inventory)")
 		print("You wake up in camp!")
 		w()
 		print("Yesterday was a big day, today your hoping to reach your final destination!")
@@ -344,7 +347,7 @@ def C1L():
 		battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
 		StrSword = entity("Strong Sword", None, [20, 35], [1, 2], True)
-		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
+		HPotion = entity("60HP Healing Potion", 60, None, None, hItem=True)
 		invItems([StrSword, HPotion])
 	if fn == fnopslg[1]:
 		print("You have chosen to try and pass through the clearing")
@@ -362,7 +365,7 @@ def C1L():
 		battle([Monster1, Monster2])
 		print("You search the area to see if the monsters had any valuable possessions")
 		StrSword = entity("Strong Sword", None, [20, 35], [1, 2], True)
-		HPotion = entity("40HP Healing Potion", 40, None, None, hItem=True)
+		HPotion = entity("50HP Healing Potion", 50, None, None, hItem=True)
 		invItems([StrSword, HPotion])
 	if fn == fnopslg[2]:
 		w()
@@ -387,7 +390,8 @@ def C1L():
 		WkBow = entity("Weak Bow", None, [5, 10], [1, 3])
 		Sword = entity("Sword", None, [15, 25], [1, 2], True)
 		HPot = entity("60HP Healing Potion", 60, None, None, hItem = True)
-		invItems([WkBow, Sword, HPot])
+		HPot2 = entity("50HP Healing Potion", 50, None, None, hItem=True)
+		invItems([WkBow, Sword, HPot, HPot2])
 		w()
 		print("After going through everything in the cabin you leave")
 		w()
@@ -410,8 +414,9 @@ def C1R():
 		print("You look around for items.")
 		w()
 		HPotion = entity("60HP Healing Potion", 60, None, None, hItem=True)
+		HPotion2 = entity("50HP Healing Potion", 50, None, None, hItem=True)
 		Sword = entity("Regular Sword", None, [15, 25], [1, 2], close=True)
-		invItems([HPotion, Sword])
+		invItems([HPotion, Sword, HPotion2])
 		print("You continue on")
 
 	w()
@@ -503,7 +508,7 @@ def C1R():
 def RMP():
 	def B1R(WithHans=True):
 
-		Jon = entity("Jon", 30, [50, 18], [1, 3])
+		Jon = entity("Jon", 30, [5, 18], [1, 3])
 		Jerry = entity("Jerry", 20, [15, 25], [1, 4])
 		Randy = entity("Randy", 30, [5, 15], [1, 3])
 		Roy = entity("Roy", 35, [5, 10], [2, 5])
